@@ -2,122 +2,89 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Dashboard Monitoring DPUPKP</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    font-family:Segoe UI,Arial,sans-serif;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Segoe UI,Arial,sans-serif;
+background:#111;
 }
 
-/* Slides */
+/* Header */
+
+header{
+
+height:42px;
+
+background:#1f2937;
+
+color:white;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 18px;
+
+font-size:17px;
+
+font-weight:600;
+
+}
+
+/* Footer */
+
+footer{
+
+height:28px;
+
+background:#1f2937;
+
+color:#ddd;
+
+display:flex;
+
+align-items:center;
+
+padding:0 18px;
+
+font-size:13px;
+
+}
+
+/* Slide */
+
 iframe{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    border:none;
-}
 
-/* Panel informasi */
-#info{
-    position:fixed;
-    top:18px;
-    right:18px;
+width:100%;
 
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(8px);
+height:calc(100vh - 70px);
 
-    color:#fff;
+border:none;
 
-    padding:15px 18px;
-
-    border-radius:14px;
-
-    z-index:999999;
-
-    text-align:right;
-
-    min-width:260px;
-
-    box-shadow:0 8px 30px rgba(0,0,0,.35);
+display:block;
 
 }
 
-#jam{
+.status{
 
-    font-size:34px;
+color:#4ade80;
 
-    font-weight:bold;
-
-}
-
-#tanggal{
-
-    margin-top:5px;
-
-    font-size:17px;
-
-}
-
-#status{
-
-    margin-top:12px;
-
-    font-size:16px;
-
-}
-
-#refresh{
-
-    margin-top:8px;
-
-    font-size:20px;
-
-    color:#69ff9c;
-
-    font-weight:bold;
-
-}
-
-#loading{
-
-    display:none;
-
-    position:fixed;
-
-    left:0;
-
-    top:0;
-
-    width:100%;
-
-    height:100%;
-
-    background:rgba(0,0,0,.85);
-
-    color:white;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:42px;
-
-    z-index:9999999;
+font-weight:bold;
 
 }
 
@@ -127,6 +94,18 @@ iframe{
 
 <body>
 
+<header>
+
+<div>
+
+Dashboard Monitoring DPUPKP Kabupaten Sleman
+
+</div>
+
+<div id="tanggal"></div>
+
+</header>
+
 <iframe
 
 src="https://docs.google.com/presentation/d/1uuu0-0_GsJ3yf1GzLuAECwF34bQDxsrpIAGnk7NEa7c/embed?start=true&loop=true&delayms=30000"
@@ -135,102 +114,48 @@ allowfullscreen>
 
 </iframe>
 
-<div id="info">
+<footer>
 
-<div id="jam"></div>
+<span class="status">🟢 Dashboard Aktif</span>
 
-<div id="tanggal"></div>
+&nbsp;&nbsp;•&nbsp;&nbsp;
 
-<div id="status"></div>
+Refresh otomatis setiap 15 menit
 
-<div id="refresh"></div>
-
-</div>
-
-<div id="loading">
-
-Memperbarui Dashboard...
-
-</div>
+</footer>
 
 <script>
 
-const REFRESH = 15 * 60;
+function updateTanggal(){
 
-let sisa = REFRESH;
+const now=new Date();
 
-function updateJam(){
+document.getElementById("tanggal").innerHTML=
 
-const now = new Date();
+now.toLocaleDateString('id-ID',{
 
-document.getElementById("jam").innerHTML =
-now.toLocaleTimeString("id-ID");
+weekday:'long',
 
-document.getElementById("tanggal").innerHTML =
-now.toLocaleDateString("id-ID",{
+day:'2-digit',
 
-weekday:"long",
+month:'long',
 
-day:"2-digit",
-
-month:"long",
-
-year:"numeric"
+year:'numeric'
 
 });
 
 }
 
-function updateStatus(){
+updateTanggal();
 
-document.getElementById("status").innerHTML =
-navigator.onLine ?
-"🟢 Online" :
-"🔴 Offline";
-
-}
-
-function updateRefresh(){
-
-const m = Math.floor(sisa/60);
-
-const d = sisa%60;
-
-document.getElementById("refresh").innerHTML =
-"Refresh : "
-+ String(m).padStart(2,'0')
-+":"
-+ String(d).padStart(2,'0');
-
-if(sisa<=0){
-
-document.getElementById("loading").style.display="flex";
-
-setTimeout(function(){
+setInterval(function(){
 
 location.reload();
 
-},1500);
-
-}
-
-sisa--;
-
-}
-
-updateJam();
-
-updateStatus();
-
-updateRefresh();
-
-setInterval(updateJam,1000);
-
-setInterval(updateStatus,5000);
-
-setInterval(updateRefresh,1000);
+},15*60*1000);
 
 </script>
 
 </body>
+
 </html>
